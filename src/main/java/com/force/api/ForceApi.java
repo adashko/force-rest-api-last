@@ -154,6 +154,26 @@ public class ForceApi {
 			throw new ResourceException(e);
 		}
 	}
+	
+	public void updateSObjects(String type, List<Object> objects) {
+		try {
+			// See createSObject for note on streaming ambition
+			apiRequest(new HttpRequest()
+				.url(uriBase()+"/sobjects/"+type+"?_HttpMethod=PATCH")
+				.method("POST")
+				.header("Accept", "application/json")
+				.header("Content-Type", "application/json")
+				.expectsCode(204)
+				.content(jsonMapper.writeValueAsBytes(objects))
+			);
+		} catch (JsonGenerationException e) {
+			throw new ResourceException(e);
+		} catch (JsonMappingException e) {
+			throw new ResourceException(e);
+		} catch (IOException e) {
+			throw new ResourceException(e);
+		}
+	}
 
 	public void deleteSObject(String type, String id) {
 		apiRequest(new HttpRequest()
